@@ -1,0 +1,24 @@
+'menu': [
+  'label': 'Packages'
+  'submenu': [
+    'label': 'Dyndocker'
+    'submenu': [
+    	{
+    		'label': 'Toggle Viewer'
+    		'command': 'dyndocker-viewer:toggle'
+    	},
+    	{
+    		'label': 'Eval Dyndoc'
+    		'command': 'dyndocker-viewer:eval' 
+    	},
+      {
+        'label': 'Compile Dyndoc'
+        'command': 'dyndocker-viewer:compile' 
+      },
+      {
+        'label': 'Atom Dyndoc'
+        'command': 'dyndocker-viewer:atom-dyndoc' 
+      }
+    ]
+  ]
+]

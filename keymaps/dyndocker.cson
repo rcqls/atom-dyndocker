@@ -1,0 +1,40 @@
+# Keybindings require three things to be fully defined: A selector that is
+# matched against the focused element, the keystroke and the command to
+# execute.
+#
+# Below is a basic keybinding which registers on all platforms by applying to
+# the root workspace element.
+
+# For more detailed documentation see
+# https://www.atom.io/docs/latest/advanced/keymaps
+
+# '.platform-darwin atom-workspace':
+#   'cmd-alt-x d': 'dyndocker-viewer:eval'
+#   'cmd-alt-x a': 'dyndocker-viewer:atom-dyndocker'
+#   'cmd-alt-x c': 'dyndocker-viewer:compile'
+#   'cmd-alt-x t': 'dyndocker-viewer:toggle'
+#   'cmd-alt-x k': 'dyndocker-viewer:kill'
+#   'cmd-alt-x s': 'dyndocker-viewer:start'
+
+
+# '.platform-win32 atom-workspace, .platform-linux atom-workspace':
+#   'ctrl-alt-x d': 'dyndocker-viewer:eval'
+#   'ctrl-alt-x a': 'dyndocker-viewer:atom-dyndocker'
+#   'ctrl-alt-x c': 'dyndocker-viewer:compile'
+#   'ctrl-alt-x t': 'dyndocker-viewer:toggle'
+#   'ctrl-alt-x k': 'dyndocker-viewer:kill'
+#   'ctrl-alt-x s': 'dyndocker-viewer:start'
+
+# '.platform-darwin .dyndocker-viewer':
+#   'cmd-+': 'dyndocker-viewer:zoom-in'
+#   'cmd-=': 'dyndocker-viewer:zoom-in'
+#   'cmd--': 'dyndocker-viewer:zoom-out'
+#   'cmd-_': 'dyndocker-viewer:zoom-out'
+#   'cmd-0': 'dyndocker-viewer:reset-zoom'
+
+# '.platform-win32 .dyndocker-viewer, .platform-linux .dyndocker-viewer':
+#   'ctrl-+': 'dyndocker-viewer:zoom-in'
+#   'ctrl-=': 'dyndocker-viewer:zoom-in'
+#   'ctrl--': 'dyndocker-viewer:zoom-out'
+#   'ctrl-_': 'markdown-preview:zoom-out'
+#   'ctrl-0': 'dyndocker-viewer:reset-zoom'

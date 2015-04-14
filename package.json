@@ -1,0 +1,20 @@
+{
+  "name": "dyndocker",
+  "main": "./lib/main",
+  "version": "0.0.1",
+  "private": true,
+  "description": "dyndoc docker from atom",
+  "activationEvents": ["dyndocker:eval","dyndocker:atom-dyndoc","dyndocker:compile","dyndocker:toggle","dyndocker:kill","dyndocker:start"],
+  "repository": "https://github.com/rcqls/atom-dyndocker",
+  "license": "LGPL",
+  "engines": {
+    "atom": ">0.39.0"
+  },
+  "dependencies": {
+    "atom-space-pen-views": "^2.0.0",
+    "net": ">1.0.0",
+    "fs-plus": "2.x",
+    "underscore-plus": "1.x",
+    "coffee-script": "1.7.x"
+  }
+}
