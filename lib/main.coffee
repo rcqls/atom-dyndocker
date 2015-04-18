@@ -27,16 +27,10 @@ module.exports =
   config:
     dyndockerHome:
       type: 'string'
-      default: if fs.existsSync(path.join process.env["HOME"],".dyndoc_home") then String(fs.readFileSync(path.join process.env["HOME"],".dyndoc_home")).trim() else path.join process.env["HOME"],"dyndoc" 
+      default: if fs.existsSync(path.join process.env["HOME"],".dyndocker_home") then String(fs.readFileSync(path.join process.env["HOME"],".dyndocker_home")).trim() else path.join process.env["HOME"],"dyndocker" 
     addToPath: 
       type: 'string'
       default: '/usr/local/bin:' + path.join(process.env["HOME"],"bin") # you can add anoter path with ":"
-    dockerServerUrl:
-      type: 'string'
-      default: '192.168.99.100'
-    dockerServerPort: 
-      type: 'integer'
-      default: 49153
     breakOnSingleNewline:
       type: 'boolean' 
       default: false
@@ -54,26 +48,24 @@ module.exports =
 
   activate: ->
     atom.commands.add 'atom-workspace', 
-      'dyndocker-viewer:eval': =>
+      'dyndocker:eval': =>
         @eval()
-      'dyndocker-viewer:compile': =>
+      'dyndocker:compile': =>
         @compile()
-      'dyndocker-viewer:atom-dyndoc': =>
+      'dyndocker:atom-dyndoc': =>
         @atomDyndoc()
-      'dyndocker-viewer:coffee': =>
+      'dyndocker:coffee': =>
         @coffee()
-      'dyndocker-viewer:toggle': =>
+      'dyndocker:toggle': =>
         @toggle()
-      'dyndocker-viewer:start': =>
-        @startServer()
-      'dyndocker-viewer:kill': =>
-        @killServer()
-      'dyndocker-viewer:toggle-break-on-single-newline': ->
-        keyPath = 'dyndocker-viewer.breakOnSingleNewline'
+      'dyndocker:restart': =>
+        @restartServer()
+      'dyndocker:toggle-break-on-single-newline': ->
+        keyPath = 'dyndocker.breakOnSingleNewline'
         atom.config.set(keyPath,!atom.config.get(keyPath))
 
 
-    #atom.workspaceView.on 'dyndocker-viewer:preview-file', (event) =>
+    #atom.workspaceView.on 'dyndocker:preview-file', (event) =>
     #  @previewFile(event)
  
     atom.workspace.registerOpener (uriToOpen) ->
@@ -82,7 +74,7 @@ module.exports =
       catch error
         return
 
-      return unless protocol is 'dyndocker-viewer:'
+      return unless protocol is 'dyndocker:'
 
       try
         pathname = decodeURI(pathname) if pathname
@@ -93,11 +85,6 @@ module.exports =
         createDyndockerViewer(editorId: pathname.substring(1))
       else
         createDyndockerViewer(filePath: pathname)
-
-    DyndockerRunner.start()
-
-  deactivate: ->
-    DyndockerRunner.stop()
 
   coffee: ->
     selection = atom.workspace.getActiveEditor().getSelection()
@@ -147,13 +134,11 @@ module.exports =
     console.log("compile dyn_file:"+dyn_file)
     DyndockerRunner.compile dyn_file
 
-  startServer: ->
-    DyndockerRunner.start()
-
-  killServer: ->
-    DyndockerRunner.stop()
+  restartServer: ->
+    DyndockerRunner.restart()
 
   toggle: ->
+    console.log("dyndocker:toggle")
     if isDyndockerViewer(atom.workspace.activePaneItem)
       atom.workspace.destroyActivePaneItem()
       return
@@ -161,15 +146,16 @@ module.exports =
     editor = atom.workspace.getActiveEditor()
     return unless editor?
 
+    console.log("dyndocker:toggle")
     #grammars = atom.config.get('dyndocker-viewer.grammars') ? []
     #return unless editor.getGrammar().scopeName in grammars
 
-    @addPreviewForEditor(editor) unless @removePreviewForEditor(editor)
+    @addDyndockerViewerForEditor(editor) unless @removeDyndockerViewerForEditor(editor)
 
   uriForEditor: (editor) ->
-    "dyndocker-viewer://editor/#{editor.id}"
+    "dyndocker://editor/#{editor.id}"
 
-  removePreviewForEditor: (editor) ->
+  removeDyndockerViewerForEditor: (editor) ->
     uri = @uriForEditor(editor)
     console.log(uri)
     previewPane = atom.workspace.paneForUri(uri)
@@ -180,7 +166,7 @@ module.exports =
     else
       false
 
-  addPreviewForEditor: (editor) ->
+  addDyndockerViewerForEditor: (editor) ->
     uri = @uriForEditor(editor)
     previousActivePane = atom.workspace.getActivePane()
     atom.workspace.open(uri, split: 'right', searchAllPanes: true).done (DyndockerViewer) ->
@@ -197,4 +183,4 @@ module.exports =
   #     @addPreviewForEditor(editor)
   #     return
 
-  #   atom.workspace.open "dyndocker-viewer://#{encodeURI(filePath)}", searchAllPanes: true
+  #   atom.workspace.open "dyndocker://#{encodeURI(filePath)}", searchAllPanes: true

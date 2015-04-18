@@ -1,49 +1,64 @@
 spawn = (require 'child_process').spawn
 exec = (require 'child_process').exec
+execSync = (require 'child_process').execSync
+
+fs = require 'fs'
 path = require 'path'
 
 dyndocker_env = process.env
+dyndocker_env["PATH"] += ":" + '/usr/local/bin:' + path.join(process.env["HOME"],"bin")
+console.log "PATH:"+dyndocker_env["PATH"]
 
-console.log(dyndocker_env)
+dyndocker_pre_path=new RegExp("^"+path.join(process.env["HOME"],"dyndocker","proj")+"/")
 
 module.exports=
 class DyndockerRunner
 
-  @dyndocker_server = null
-  @dyndocker_client = null
-  @dyndocker_run_cmd = 'ruby' #if process.platform == 'win32' then 'rubyw' else 'ruby'
+  @dyndocker_machine = (execSync "docker-machine config dev",{"env": dyndocker_env}).toString("utf-8")
+  console.log "docker-machine config dev:"+ @dyndocker_machine
+  @dyndocker_run_cmd = "docker " + @dyndocker_machine + " "
+
+  @restart: ->
+    console.log 'Dyndocker server is restarting...'
+    exec @dyndocker_run_cmd + "restart dyndoc",{"env": dyndocker_env},(error,stdout,stderr) ->
+      console.log 'dyndocker-server stdout: ' + stdout
+      console.log 'dyndocker-server stderr: ' + stderr
+      if error != null
+        console.log 'dyndocker-server error: ' + error
 
   @start: ->
-  	dyndocker_env["DYN_HOME"] =  atom.config.get('dyndocker-viewer.dyndockerHome')
-  	## To fix PATH when /usr/local/bin not inside PATH
-  	for pa in atom.config.get('dyndocker-viewer.addToPath').split(":")
-  	  dyndocker_env["PATH"] += ":" + pa if dyndocker_env["PATH"].split(":").indexOf(pa) < 0
-  	    
-  	@dyndocker_server = spawn @dyndocker_run_cmd,[path.join atom.config.get('dyndocker-viewer.dyndockerHome'),"bin","dyndoc-server-simple.rb"],{"env": dyndocker_env}
-  	
-  	@dyndocker_server.stderr.on 'data', (data) ->
-  	  console.log 'dyndocker-server stderr: ' + data
-
-  	@dyndocker_server.stdout.on 'data', (data) ->
-  	  console.log 'dyndocker-server stdout: ' + data
-
-  @started: ->
-  	console.log ["started",@dyndocker_server]
-  	if @dyndocker_server == null or @dyndocker_server.killed
-  	  @start()
+    console.log 'Dyndocker server is starting...'
+    exec @dyndocker_run_cmd + "start dyndoc",{"env": dyndocker_env},(error,stdout,stderr) ->
+      console.log 'dyndocker-server stdout: ' + stdout
+      console.log 'dyndocker-server stderr: ' + stderr
+      if error != null
+        console.log 'dyndocker-server error: ' + error
 
   @stop: ->
-    console.log 'DyndockerRunner is leaving...'
-    if @dyndocker_client != null
-      @dyndocker_client.close
-      console.log 'DyndockerRunner client is closed!'
-    @dyndocker_server.kill()
-    console.log 'DyndockerRunner is killed!'
+    console.log 'Dyndocker server is stopping...'
+    exec @dyndocker_run_cmd + "stop dyndoc",{"env": dyndocker_env},(error,stdout,stderr) ->
+      console.log 'dyndocker-server stdout: ' + stdout
+      console.log 'dyndocker-server stderr: ' + stderr
+      if error != null
+        console.log 'dyndocker-server error: ' + error
 
   @compile: (dyn_file) ->
-  	compile_cmd=@dyndocker_run_cmd + " " + path.join(atom.config.get('dyndocker-viewer.dyndockerHome'),"bin","dyndoc-compile.rb") + " \"" + dyn_file + "\""
-  	exec compile_cmd, {"env": dyndocker_env}, (error,stdout,stderr) ->
-  	  console.log 'dyndoc-compile stdout: ' + stdout
-  	  console.log 'dyndoc-compile stderr: ' + stderr
-  	  if error != null
-  	  	console.log 'dyndoc-compile error: ' + error
+    if ((dyn_file.match /\/src\//) != null)
+      dyn_file_build = dyn_file.replace "/src/","/build/"
+      console.log "dyn_file_build:" + dyn_file_build
+      console.log "link:"+ (fs.readlinkSync dyn_file_build)
+      if fs.existsSync(dyn_file_build) and (fs.lstatSync dyn_file_build).isSymbolicLink() #and (fs.realpathSync(fs.readlinkSync dyn_file_build) == dyn_file) 
+        dyn_file = dyn_file_build
+
+    console.log "dyn_file:" + dyn_file
+    dyn_file_inside_docker = dyn_file.replace dyndocker_pre_path,""
+    console.log "dyndocker compile: "+dyn_file_inside_docker
+    if (dyn_file.match dyndocker_pre_path) != null
+      compile_cmd=@dyndocker_run_cmd + "exec dyndoc dyn" + " \"" + dyn_file_inside_docker + "\""
+      exec compile_cmd, {"env": dyndocker_env}, (error,stdout,stderr) ->
+        console.log 'dyndocker-compile stdout: ' + stdout
+        console.log 'dyndocker-compile stderr: ' + stderr
+        if error != null
+          console.log 'dyndocker-compile error: ' + error
+    else
+      alert "file "+dyn_file_inside_docker+" could not be compiled!"

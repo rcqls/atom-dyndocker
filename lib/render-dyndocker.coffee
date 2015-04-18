@@ -1,3 +1,11 @@
+execSync = (require 'child_process').execSync
+
+path = require 'path'
+
+dyndocker_env = process.env
+dyndocker_env["PATH"] += ":" + '/usr/local/bin:' + path.join(process.env["HOME"],"bin")
+console.log "PATH:"+dyndocker_env["PATH"]
+
 DyndockerRunner = require './dyndocker-runner'
 
 exports.eval = (text='', filePath, callback) ->
@@ -13,8 +21,9 @@ exports.eval = (text='', filePath, callback) ->
 
 	net = require 'net'
 	#util = require 'util'
-	host = atom.config.get 'dyndocker-viewer.dockerServerUrl'
-	port = atom.config.get 'dyndocker-viewer.dockerServerPort'
+	host = (execSync "docker-machine ip dev",{"env": dyndocker_env}).toString("utf-8").trim() #atom.config.get 'dyndocker.dockerServerUrl'
+	port = '7777' #atom.config.get 'dyndocker.dockerServerPort'
+	console.log("Host:Port="+host+":"+port)
 
 	client = net.connect {port: port, host: host}, () ->
 		#console.log (util.inspect '__send_cmd__[[dyndoc]]__' + text + end_token)

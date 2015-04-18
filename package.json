@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "description": "dyndoc docker from atom",
-  "activationEvents": ["dyndocker:eval","dyndocker:atom-dyndoc","dyndocker:compile","dyndocker:toggle","dyndocker:kill","dyndocker:start"],
+  "activationEvents": ["dyndocker:eval","dyndocker:atom-dyndoc","dyndocker:compile","dyndocker:toggle","dyndocker:restart"],
   "repository": "https://github.com/rcqls/atom-dyndocker",
   "license": "LGPL",
   "engines": {

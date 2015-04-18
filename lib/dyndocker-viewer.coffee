@@ -12,7 +12,7 @@ rendererDyndocker = require './render-dyndocker'
 module.exports =
 class DyndockerViewer extends ScrollView
   @content: ->
-    @div class: 'dyndocker-viewer native-key-bindings', tabindex: -1
+    @div class: 'dyndocker native-key-bindings', tabindex: -1
 
   constructor: ({@editorId, filePath}) ->
     super
@@ -80,13 +80,13 @@ class DyndockerViewer extends ScrollView
         @scrollUp()
       'core:move-down': => 
         @scrollDown()
-      'dyndocker-viewer:zoom-in': =>
+      'dyndocker:zoom-in': =>
         zoomLevel = parseFloat(@css('zoom')) or 1
         @css('zoom', zoomLevel + .1)
-      'dyndocker-viewer:zoom-out': =>
+      'dyndocker:zoom-out': =>
         zoomLevel = parseFloat(@css('zoom')) or 1
         @css('zoom', zoomLevel - .1)
-      'dyndocker-viewer:reset-zoom': =>
+      'dyndocker:reset-zoom': =>
         @css('zoom', 1)
 
     changeHandler = =>
@@ -102,11 +102,11 @@ class DyndockerViewer extends ScrollView
         changeHandler() if atom.config.get 'dyndocker-viewer.liveUpdate'
       @disposables.add  @editor.onDidChangePath => @emitter.emit 'did-title-changed'
       @disposables.add @editor.getBuffer().onDidSave =>
-        changeHandler() unless atom.config.get 'dyndocker-viewer.liveUpdate'
+        changeHandler() unless atom.config.get 'dyndocker.liveUpdate'
       @disposables.add @editor.getBuffer().onDidReload =>
-        changeHandler() unless atom.config.get 'dyndocker-viewer.liveUpdate'
+        changeHandler() unless atom.config.get 'dyndocker.liveUpdate'
 
-    @disposables.add atom.config.onDidChange 'dyndocker-viewer.breakOnSingleNewline', changeHandler
+    @disposables.add atom.config.onDidChange 'dyndocker.breakOnSingleNewline', changeHandler
 
   renderDyndoc: ->
     @showLoading()
@@ -129,7 +129,7 @@ class DyndockerViewer extends ScrollView
         @loading = false
         console.log('render content:'+content)
         @html(content)
-        @trigger('dyndocker-viewer:dyndocker-changed')
+        @trigger('dyndocker:dyndocker-changed')
 
   eval: (text,callback) ->
     console.log("eval text:"+text)
@@ -155,9 +155,9 @@ class DyndockerViewer extends ScrollView
 
   getUri: ->
     if @file?
-      "dyndocker-viewer://#{@getPath()}"
+      "dyndocker://#{@getPath()}"
     else
-      "dyndocker-viewer://editor/#{@editorId}"
+      "dyndocker://editor/#{@editorId}"
 
   getPath: ->
     if @file?

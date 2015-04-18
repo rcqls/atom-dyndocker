@@ -8,33 +8,30 @@
 # For more detailed documentation see
 # https://www.atom.io/docs/latest/advanced/keymaps
 
-# '.platform-darwin atom-workspace':
-#   'cmd-alt-x d': 'dyndocker-viewer:eval'
-#   'cmd-alt-x a': 'dyndocker-viewer:atom-dyndocker'
-#   'cmd-alt-x c': 'dyndocker-viewer:compile'
-#   'cmd-alt-x t': 'dyndocker-viewer:toggle'
-#   'cmd-alt-x k': 'dyndocker-viewer:kill'
-#   'cmd-alt-x s': 'dyndocker-viewer:start'
+'.platform-darwin atom-workspace':
+  'cmd-alt-x d': 'dyndocker:eval'
+  'cmd-alt-x a': 'dyndocker:atom-dyndoc'
+  'cmd-alt-x c': 'dyndocker:compile'
+  'cmd-alt-x t': 'dyndocker:toggle'
+  'cmd-alt-x r': 'dyndocker:restart'
 
+'.platform-win32 atom-workspace, .platform-linux atom-workspace':
+  'ctrl-alt-x d': 'dyndocker:eval'
+  'ctrl-alt-x a': 'dyndocker:atom-dyndoc'
+  'ctrl-alt-x c': 'dyndocker:compile'
+  'ctrl-alt-x t': 'dyndocker:toggle'
+  'ctrl-alt-x r': 'dyndocker:restart'
 
-# '.platform-win32 atom-workspace, .platform-linux atom-workspace':
-#   'ctrl-alt-x d': 'dyndocker-viewer:eval'
-#   'ctrl-alt-x a': 'dyndocker-viewer:atom-dyndocker'
-#   'ctrl-alt-x c': 'dyndocker-viewer:compile'
-#   'ctrl-alt-x t': 'dyndocker-viewer:toggle'
-#   'ctrl-alt-x k': 'dyndocker-viewer:kill'
-#   'ctrl-alt-x s': 'dyndocker-viewer:start'
+'.platform-darwin .dyndocker':
+  'cmd-+': 'dyndocker:zoom-in'
+  'cmd-=': 'dyndocker:zoom-in'
+  'cmd--': 'dyndocker:zoom-out'
+  'cmd-_': 'dyndocker:zoom-out'
+  'cmd-0': 'dyndocker:reset-zoom'
 
-# '.platform-darwin .dyndocker-viewer':
-#   'cmd-+': 'dyndocker-viewer:zoom-in'
-#   'cmd-=': 'dyndocker-viewer:zoom-in'
-#   'cmd--': 'dyndocker-viewer:zoom-out'
-#   'cmd-_': 'dyndocker-viewer:zoom-out'
-#   'cmd-0': 'dyndocker-viewer:reset-zoom'
-
-# '.platform-win32 .dyndocker-viewer, .platform-linux .dyndocker-viewer':
-#   'ctrl-+': 'dyndocker-viewer:zoom-in'
-#   'ctrl-=': 'dyndocker-viewer:zoom-in'
-#   'ctrl--': 'dyndocker-viewer:zoom-out'
-#   'ctrl-_': 'markdown-preview:zoom-out'
-#   'ctrl-0': 'dyndocker-viewer:reset-zoom'
+'.platform-win32 .dyndocker, .platform-linux .dyndocker':
+  'ctrl-+': 'dyndocker:zoom-in'
+  'ctrl-=': 'dyndocker:zoom-in'
+  'ctrl--': 'dyndocker:zoom-out'
+  'ctrl-_': 'markdown:zoom-out'
+  'ctrl-0': 'dyndocker:reset-zoom'

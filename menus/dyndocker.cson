@@ -5,19 +5,23 @@
     'submenu': [
     	{
     		'label': 'Toggle Viewer'
-    		'command': 'dyndocker-viewer:toggle'
+    		'command': 'dyndocker:toggle'
     	},
+      {
+        'label': 'Restart Server'
+        'command': 'dyndocker:restart'
+      },
     	{
     		'label': 'Eval Dyndoc'
-    		'command': 'dyndocker-viewer:eval' 
+    		'command': 'dyndocker:eval' 
     	},
       {
         'label': 'Compile Dyndoc'
-        'command': 'dyndocker-viewer:compile' 
+        'command': 'dyndocker:compile' 
       },
       {
         'label': 'Atom Dyndoc'
-        'command': 'dyndocker-viewer:atom-dyndoc' 
+        'command': 'dyndocker:atom-dyndoc' 
       }
     ]
   ]
