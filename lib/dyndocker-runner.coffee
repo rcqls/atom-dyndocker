@@ -9,7 +9,7 @@ dyndocker_env = process.env
 dyndocker_env["PATH"] += ":" + '/usr/local/bin:' + path.join(process.env["HOME"],"bin")
 console.log "PATH:"+dyndocker_env["PATH"]
 
-dyndocker_pre_path=new RegExp("^"+path.join(process.env["HOME"],"dyndocker","proj")+"/")
+dyndocker_pre_path=new RegExp("^"+path.join(process.env["HOME"],"dyndocker")+"/")
 
 module.exports=
 class DyndockerRunner
