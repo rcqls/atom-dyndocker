@@ -68,7 +68,7 @@ class DyndockerViewer extends ScrollView
       #   #@renderDyndoc()
 
   editorForId: (editorId) ->
-    for editor in atom.workspace.getEditors()
+    for editor in atom.workspace.getTextEditors()
       return editor if editor.id?.toString() is editorId.toString()
     null
 
@@ -91,7 +91,7 @@ class DyndockerViewer extends ScrollView
 
     changeHandler = =>
       #@renderDyndoc()
-      pane = atom.workspace.paneForUri(@getUri())
+      pane = atom.workspace.paneForURI(@getURI())
       if pane? and pane isnt atom.workspace.getActivePane()
         pane.activateItem(this)
 
@@ -153,7 +153,7 @@ class DyndockerViewer extends ScrollView
   getIconName: ->
     "dyndocker"
 
-  getUri: ->
+  getURI: ->
     if @file?
       "dyndocker://#{@getPath()}"
     else

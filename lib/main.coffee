@@ -68,7 +68,7 @@ module.exports =
     #atom.workspaceView.on 'dyndocker:preview-file', (event) =>
     #  @previewFile(event)
  
-    atom.workspace.registerOpener (uriToOpen) ->
+    atom.workspace.addOpener (uriToOpen) ->
       try
         {protocol, host, pathname} = url.parse(uriToOpen)
       catch error
@@ -87,21 +87,19 @@ module.exports =
         createDyndockerViewer(filePath: pathname)
 
   coffee: ->
-    selection = atom.workspace.getActiveEditor().getSelection()
-    text = selection.getText()
+    text = atom.workspace.getActiveTextEditor().getSelectedText()
     console.log rendererCoffee.eval text
 
   atomDyndoc: ->
-    selection = atom.workspace.getActiveEditor().getSelection()
-    text = selection.getText()
+    text = atom.workspace.getActiveTextEditor().getSelectedText()
     if text == ""
-      text = atom.workspace.getActiveEditor().getText()
+      text = atom.workspace.getActiveTextEditor().getText()
     #util = require 'util'
 
     text='[#require]Tools/Atom\n[#main][#>]{#atomInit#}\n'+text
     ##console.log "text:  "+text
     text=text.replace /\#\{/g,"__AROBAS_ATOM__{"
-    rendererDyndocker.eval text, atom.workspace.getActiveEditor().getPath(), (error, content) ->
+    rendererDyndocker.eval text, atom.workspace.getActiveTextEditor().getPath(), (error, content) ->
       if error
         console.log "err: "+content
       else
@@ -118,10 +116,9 @@ module.exports =
 
   eval: ->
     return unless dyndocker_viewer
-    selection = atom.workspace.getActiveEditor().getSelection()
-    text = selection.getText()
+    text = atom.workspace.getActiveTextEditor().getSelectedText()
     if text == ""
-      text = atom.workspace.getActiveEditor().getText()
+      text = atom.workspace.getActiveTextEditor().getText()
     dyndocker_viewer.render(text)
     #res = renderer.toText text, "toto", (error, content) ->
     #  if error
@@ -143,7 +140,7 @@ module.exports =
       atom.workspace.destroyActivePaneItem()
       return
 
-    editor = atom.workspace.getActiveEditor()
+    editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
     console.log("dyndocker:toggle")
@@ -158,16 +155,17 @@ module.exports =
   removeDyndockerViewerForEditor: (editor) ->
     uri = @uriForEditor(editor)
     console.log(uri)
-    previewPane = atom.workspace.paneForUri(uri)
+    previewPane = atom.workspace.paneForURI(uri)
     console.log("preview-pane: "+previewPane)
     if previewPane?
-      previewPane.destroyItem(previewPane.itemForUri(uri))
+      previewPane.destroyItem(previewPane.itemForURI(uri))
       true
     else
       false
 
   addDyndockerViewerForEditor: (editor) ->
     uri = @uriForEditor(editor)
+    console.log "uri:"+uri
     previousActivePane = atom.workspace.getActivePane()
     atom.workspace.open(uri, split: 'right', searchAllPanes: true).done (DyndockerViewer) ->
       if isDyndockerViewer(DyndockerViewer)
