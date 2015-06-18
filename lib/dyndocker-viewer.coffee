@@ -129,7 +129,7 @@ class DyndockerViewer extends ScrollView
         @loading = false
         console.log('render content:'+content)
         @html(content)
-        @trigger('dyndocker:dyndocker-changed')
+        #@trigger('dyndocker:dyndocker-changed')
 
   eval: (text,callback) ->
     console.log("eval text:"+text)
