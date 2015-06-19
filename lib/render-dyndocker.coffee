@@ -23,6 +23,8 @@ exports.eval = (text='', filePath, callback) ->
 	#util = require 'util'
 	host = (execSync "docker-machine ip dev",{"env": dyndocker_env}).toString("utf-8").trim() #atom.config.get 'dyndocker.dockerServerUrl'
 	port = '7777' #atom.config.get 'dyndocker.dockerServerPort'
+	port = DyndockerRunner.getPort()
+	console.log("Port by getPort:"+DyndockerRunner.getPort())
 	console.log("Host:Port="+host+":"+port)
 
 	client = net.connect {port: port, host: host}, () ->
