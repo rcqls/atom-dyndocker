@@ -2,7 +2,6 @@
   "name": "dyndocker",
   "main": "./lib/main",
   "version": "0.0.1",
-  "private": true,
   "description": "dyndoc docker from atom",
   "activationCommands": {
     "atom-workspace": ["dyndocker:eval","dyndocker:atom-dyndoc","dyndocker:compile","dyndocker:toggle","dyndocker:restart"]
@@ -10,7 +9,7 @@
   "repository": "https://github.com/rcqls/atom-dyndocker",
   "license": "LGPL",
   "engines": {
-    "atom": ">0.39.0"
+    "atom": ">0.50.0"
   },
   "dependencies": {
     "atom-space-pen-views": "^2.0.0",
