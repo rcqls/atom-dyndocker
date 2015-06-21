@@ -5,11 +5,18 @@ execSync = (require 'child_process').execSync
 fs = require 'fs'
 path = require 'path'
 
-dyndocker_machine_name="dev"
+dyndocker_machine_name = if process.platform == 'win32' then "kitematic" else "dev" #for windows kitematic!
 dyndocker_container = "dyndoc-docker"
 dyndocker_env = process.env
-dyndocker_env["PATH"] += ":" + '/usr/local/bin:' + path.join(process.env["HOME"],"bin")
-console.log "PATH:"+dyndocker_env["PATH"]
+docker_path='/usr/local/bin'
+
+if process.platform == 'win32'
+  paths = (pa for pa in fs.readdirSync path.join(process.env.LOCALAPPDATA,"Kitematic") when pa.split("\-")[0]=="app").sort().reverse()
+  docker_path=path.join(process.env.LOCALAPPDATA,"Kitematic",paths[0],"resources","resources")
+  dyndocker_env["PATH"] += ';' + docker_path + ';' + path.join(process.env["HOME"],"bin")
+else
+  dyndocker_env["PATH"] += ':' + docker_path + ':' + path.join(process.env["HOME"],"bin")
+console.log "PATH("+process.platform+"):"+dyndocker_env["PATH"]
 
 dyndocker_pre_path=new RegExp("^"+path.join(process.env["HOME"],"dyndocker")+"/")
 
