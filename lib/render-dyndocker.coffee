@@ -8,13 +8,13 @@ dyndocker_env = process.env
 if process.platform == 'win32'
   paths = (pa for pa in fs.readdirSync path.join(process.env.LOCALAPPDATA,"Kitematic") when pa.split("\-")[0]=="app").sort().reverse()
   docker_path=path.join(process.env.LOCALAPPDATA,"Kitematic",paths[0],"resources","resources")
-  dyndocker_env["PATH"] += ';' + docker_path +';' + path.join(process.env["USERPROFILE"],"bin")
+  dyndocker_env.PATH += ';' + docker_path + ';' + path.join(process.env.USERPROFILE,"bin")
 else
   docker_path='/usr/local/bin'
   #console.log "PATH("+process.platform+"):"+dyndocker_env["PATH"]
-  dyndocker_env["PATH"] += ':' + docker_path + ':' + path.join(process.env["HOME"],"bin")
+  dyndocker_env.PATH += ':' + docker_path + ':' + path.join(process.env.HOME,"bin")
 
-console.log "PATH("+process.platform+"):"+dyndocker_env["PATH"]
+console.log "PATH("+process.platform+"):"+dyndocker_env.PATH
 
 DyndockerRunner = require './dyndocker-runner'
 
