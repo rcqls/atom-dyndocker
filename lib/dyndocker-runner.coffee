@@ -1,6 +1,6 @@
 spawn = (require 'child_process').spawn
 exec = (require 'child_process').exec
-execSync = (require 'child_process').execSync
+spawnSync = (require 'child_process').spawnSync
 
 fs = require 'fs'
 path = require 'path'
@@ -9,22 +9,27 @@ dyndocker_machine_name = if process.platform == 'win32' then "kitematic" else "d
 dyndocker_container = "dyndoc-docker"
 dyndocker_env = process.env
 docker_path='/usr/local/bin'
+user_home = process.env[if process.platform == "win32" then "USERPROFILE" else "HOME"]
 
 if process.platform == 'win32'
   paths = (pa for pa in fs.readdirSync path.join(process.env.LOCALAPPDATA,"Kitematic") when pa.split("\-")[0]=="app").sort().reverse()
   docker_path=path.join(process.env.LOCALAPPDATA,"Kitematic",paths[0],"resources","resources")
-  dyndocker_env["PATH"] += ';' + docker_path + ';' + path.join(process.env["HOME"],"bin")
+  dyndocker_env["PATH"] += ';' + docker_path + ';' + path.join(user_home,"bin")
 else
-  dyndocker_env["PATH"] += ':' + docker_path + ':' + path.join(process.env["HOME"],"bin")
+  dyndocker_env["PATH"] += ':' + docker_path + ':' + path.join(user_home,"bin")
 console.log "PATH("+process.platform+"):"+dyndocker_env["PATH"]
 
-dyndocker_pre_path=new RegExp("^"+path.join(process.env["HOME"],"dyndocker")+"/")
+
+dyndocker_pre_path_reg="^"+path.join(user_home,"dyndocker")+"/"
+dyndocker_pre_path_reg = dyndocker_pre_path_reg.replace(new RegExp(path.sep+path.sep,"g"),"/")  if process.platform == "win32"
+dyndocker_pre_path=new RegExp(dyndocker_pre_path_reg)
 
 module.exports=
 class DyndockerRunner
 
-  @dyndocker_machine = (execSync "docker-machine config "+dyndocker_machine_name,{"env": dyndocker_env}).toString("utf-8")
-  console.log "docker-machine config "+dyndocker_machine_name+ @dyndocker_machine
+  @dyndocker_machine = (spawnSync "docker-machine",("config "+dyndocker_machine_name).split(" "),{"env": dyndocker_env})
+  @dyndocker_machine = @dyndocker_machine.stdout.toString("utf-8")
+  console.log "docker-machine config "+dyndocker_machine_name+ " -> " +@dyndocker_machine
   @dyndocker_run_cmd = "docker " + @dyndocker_machine + " "
 
   @restart: ->
@@ -52,13 +57,9 @@ class DyndockerRunner
         console.log 'dyndocker-server error: ' + error
 
   @getPort: ->
-    out=execSync @dyndocker_run_cmd + "port "+dyndocker_container+" 7777/tcp",{"env": dyndocker_env},(error,stdout,stderr) ->
-      console.log 'dyndocker port stdout: ' + stdout
-      console.log 'dyndocker port stderr: ' + stderr
-      if error != null
-        console.log 'dyndocker port error: ' + error
-    
-    out.toString().split(":")[1]
+    out=spawnSync "docker", (@dyndocker_machine+" port "+dyndocker_container+" 7777/tcp").split(" "),{"env": dyndocker_env} 
+    console.log("get port:"+out.stdout.toString())
+    out.stdout.toString().split(":")[1]
 
   @compile: (dyn_file) ->
     if ((dyn_file.match /\/src\//) != null)
@@ -68,6 +69,7 @@ class DyndockerRunner
       if fs.existsSync(dyn_file_build) and (fs.lstatSync dyn_file_build).isSymbolicLink() #and (fs.realpathSync(fs.readlinkSync dyn_file_build) == dyn_file) 
         dyn_file = dyn_file_build
 
+    dyn_file = dyn_file.replace(new RegExp(path.sep+path.sep,"g"),"/")
     console.log "dyn_file:" + dyn_file
     dyn_file_inside_docker = dyn_file.replace dyndocker_pre_path,""
     console.log "dyndocker compile: "+dyn_file_inside_docker

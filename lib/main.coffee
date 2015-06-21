@@ -23,14 +23,16 @@ atom.deserializers.add
   deserialize: (state) ->
     createDyndockerViewer(state) if state.constructor is Object
 
+user_home=process.env[if process.platform=="win32" then "USERPROFILE" else "HOME"]
+
 module.exports =
   config:
     dyndockerHome:
       type: 'string'
-      default: if fs.existsSync(path.join process.env["HOME"],".dyndocker_home") then String(fs.readFileSync(path.join process.env["HOME"],".dyndocker_home")).trim() else path.join process.env["HOME"],"dyndocker" 
+      default: if fs.existsSync(path.join user_home,".dyndocker_home") then String(fs.readFileSync(path.join user_home,".dyndocker_home")).trim() else path.join user_home,"dyndocker" 
     addToPath: 
       type: 'string'
-      default: '/usr/local/bin:' + path.join(process.env["HOME"],"bin") # you can add anoter path with ":"
+      default: '/usr/local/bin:' + path.join(user_home,"bin") # you can add anoter path with ":"
     breakOnSingleNewline:
       type: 'boolean' 
       default: false
