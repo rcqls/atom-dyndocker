@@ -98,7 +98,7 @@ module.exports =
       text = atom.workspace.getActiveTextEditor().getText()
     #util = require 'util'
 
-    text='[#require]Tools/Atom\n[#main][#>]{#atomInit#}\n'+text
+    text='[#require]Tools/AtomDyndocker\n[#main][#>]{#atomInit#}\n'+text
     ##console.log "text:  "+text
     text=text.replace /\#\{/g,"__AROBAS_ATOM__{"
     rendererDyndocker.eval text, atom.workspace.getActiveTextEditor().getPath(), (error, content) ->
