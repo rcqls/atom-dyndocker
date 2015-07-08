@@ -39,19 +39,25 @@ exports.eval = (text='', filePath, callback) ->
 	console.log("Host:Port="+host+":"+port)
 
 	client = net.connect {port: port, host: host}, () ->
+		result=''
 		#console.log (util.inspect '__send_cmd__[[dyndoc]]__' + text + end_token)
 		client.write '__send_cmd__[[dyndoc]]__' + text + end_token + '\n'
 
 		client.on 'data', (data) ->
 			#console.log "data:" + data.toString()
-			data.toString().split(end_token).slice(0,-1).map (cmd) ->
-				#console.log("<<"+cmd+">>")
-				resCmd = decode_cmd(cmd)
+			data2=data.toString().split(end_token)
+			last=data2.pop()
+			result += data2.join("") 
+			#console.log("last:<<"+last+">>")
+			if last == ""
+				#console.log("<<"+result+">>")
+				resCmd = decode_cmd(result)
 				if resCmd["cmd"] != "windows_platform"
-						#console.log("data: "+resCmd["content"])
-						callback(null, resCmd["content"])
-						client.end()
-				resCmd
+					#console.log("data: "+resCmd["content"])
+					callback(null, resCmd["content"])
+					client.end()
+			else
+				result += last
 
 	  	client.on 'error', (err) ->
 	    	#console.log('error:', err.message)
