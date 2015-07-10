@@ -27,8 +27,12 @@ dyndocker_pre_path=new RegExp(dyndocker_pre_path_reg)
 module.exports=
 class DyndockerRunner
 
-  @dyndocker_machine = (spawnSync "docker-machine",("config "+dyndocker_machine_name).split(" "),{"env": dyndocker_env})
-  @dyndocker_machine = @dyndocker_machine.stdout.toString("utf-8")
+  if process.platform == "linux"
+    @dyndocker_machine = ""
+  else 
+    @dyndocker_machine = (spawnSync "docker-machine",("config "+dyndocker_machine_name).split(" "),{"env": dyndocker_env})
+    @dyndocker_machine = @dyndocker_machine.stdout.toString("utf-8")
+  
   console.log "docker-machine config "+dyndocker_machine_name+ " -> " +@dyndocker_machine
   @dyndocker_run_cmd = "docker " + @dyndocker_machine + " "
 
@@ -57,9 +61,12 @@ class DyndockerRunner
         console.log 'dyndocker-server error: ' + error
 
   @getPort: ->
-    out=spawnSync "docker", (@dyndocker_machine+" port "+dyndocker_container+" 7777/tcp").split(" "),{"env": dyndocker_env} 
-    console.log("get port:"+out.stdout.toString())
-    out.stdout.toString().split(":")[1]
+    if process.platform == "linux"
+      "7777"
+    else
+      out=spawnSync "docker", (@dyndocker_machine+" port "+dyndocker_container+" 7777/tcp").split(" "),{"env": dyndocker_env} 
+      console.log("get Port:"+out.stdout.toString())
+      out.stdout.toString().split(":")[1]
 
   @compile: (dyn_file) ->
     if ((dyn_file.match /\/src\//) != null)
