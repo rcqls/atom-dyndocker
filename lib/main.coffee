@@ -27,6 +27,9 @@ user_home=process.env[if process.platform=="win32" then "USERPROFILE" else "HOME
 
 module.exports =
   config:
+    dyndockerContainer:
+      type: 'string'
+      default: 'dyndoc-docker'
     dyndockerHome:
       type: 'string'
       default: if fs.existsSync(path.join user_home,".dyndocker_home") then String(fs.readFileSync(path.join user_home,".dyndocker_home")).trim() else path.join user_home,"dyndocker" 

@@ -6,7 +6,7 @@ fs = require 'fs'
 path = require 'path'
 
 dyndocker_machine_name = if process.platform == 'win32' then "kitematic" else "dev" #for windows kitematic!
-dyndocker_container = "dyndoc-docker"
+dyndocker_container =  atom.config.get("dyndocker.dyndockerContainer") # "dyndoc-docker"
 dyndocker_env = process.env
 docker_path='/usr/local/bin'
 user_home = process.env[if process.platform == "win32" then "USERPROFILE" else "HOME"]
