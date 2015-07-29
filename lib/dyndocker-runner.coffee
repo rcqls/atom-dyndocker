@@ -6,7 +6,6 @@ fs = require 'fs'
 path = require 'path'
 
 dyndocker_machine_name = if process.platform == 'win32' then "kitematic" else "dev" #for windows kitematic!
-dyndocker_container =  atom.config.get("dyndocker.dyndockerContainer") # "dyndoc-docker"
 dyndocker_env = process.env
 docker_path='/usr/local/bin'
 user_home = process.env[if process.platform == "win32" then "USERPROFILE" else "HOME"]
@@ -32,13 +31,13 @@ class DyndockerRunner
   else 
     @dyndocker_machine = (spawnSync "docker-machine",("config "+dyndocker_machine_name).split(" "),{"env": dyndocker_env})
     @dyndocker_machine = @dyndocker_machine.stdout.toString("utf-8")
-  
+
   console.log "docker-machine config "+dyndocker_machine_name+ " -> " +@dyndocker_machine
   @dyndocker_run_cmd = "docker " + @dyndocker_machine + " "
 
   @restart: ->
     console.log 'Dyndocker server is restarting...'
-    exec @dyndocker_run_cmd + "restart "+dyndocker_container,{"env": dyndocker_env},(error,stdout,stderr) ->
+    exec @dyndocker_run_cmd + "restart "+atom.config.get("dyndocker.containerName"),{"env": dyndocker_env},(error,stdout,stderr) ->
       console.log 'dyndocker-server stdout: ' + stdout
       console.log 'dyndocker-server stderr: ' + stderr
       if error != null
@@ -46,7 +45,7 @@ class DyndockerRunner
 
   @start: ->
     console.log 'Dyndocker server is starting...'
-    exec @dyndocker_run_cmd + "start "+dyndocker_container,{"env": dyndocker_env},(error,stdout,stderr) ->
+    exec @dyndocker_run_cmd + "start "+atom.config.get("dyndocker.containerName"),{"env": dyndocker_env},(error,stdout,stderr) ->
       console.log 'dyndocker-server stdout: ' + stdout
       console.log 'dyndocker-server stderr: ' + stderr
       if error != null
@@ -54,7 +53,7 @@ class DyndockerRunner
 
   @stop: ->
     console.log 'Dyndocker server is stopping...'
-    exec @dyndocker_run_cmd + "stop "+dyndocker_container,{"env": dyndocker_env},(error,stdout,stderr) ->
+    exec @dyndocker_run_cmd + "stop "+atom.config.get("dyndocker.containerName"),{"env": dyndocker_env},(error,stdout,stderr) ->
       console.log 'dyndocker-server stdout: ' + stdout
       console.log 'dyndocker-server stderr: ' + stderr
       if error != null
@@ -64,7 +63,7 @@ class DyndockerRunner
     if process.platform == "linux"
       "7777"
     else
-      out=spawnSync "docker", (@dyndocker_machine+" port "+dyndocker_container+" 7777/tcp").split(" "),{"env": dyndocker_env} 
+      out=spawnSync "docker", (@dyndocker_machine+" port "+atom.config.get("dyndocker.containerName")+" 7777/tcp").split(" "),{"env": dyndocker_env} 
       console.log("get Port:"+out.stdout.toString())
       out.stdout.toString().split(":")[1]
 
@@ -81,7 +80,7 @@ class DyndockerRunner
     dyn_file_inside_docker = dyn_file.replace dyndocker_pre_path,""
     console.log "dyndocker compile: "+dyn_file_inside_docker
     if (dyn_file.match dyndocker_pre_path) != null
-      compile_cmd=@dyndocker_run_cmd + "exec "+dyndocker_container+" dyn" + " \"" + dyn_file_inside_docker + "\""
+      compile_cmd=@dyndocker_run_cmd + "exec "+atom.config.get("dyndocker.containerName")+" dyn" + " \"" + dyn_file_inside_docker + "\""
       exec compile_cmd, {"env": dyndocker_env}, (error,stdout,stderr) ->
         console.log 'dyndocker-compile stdout: ' + stdout
         console.log 'dyndocker-compile stderr: ' + stderr

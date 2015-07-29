@@ -27,7 +27,7 @@ user_home=process.env[if process.platform=="win32" then "USERPROFILE" else "HOME
 
 module.exports =
   config:
-    dyndockerContainer:
+    containerName:
       type: 'string'
       default: 'dyndoc-docker'
     dyndockerHome:
@@ -51,7 +51,7 @@ module.exports =
         'text.html.textile'
       ]
 
-  activate: ->
+  activate: (state) ->
     atom.commands.add 'atom-workspace', 
       'dyndocker:eval': =>
         @eval()
