@@ -5,7 +5,7 @@ spawnSync = (require 'child_process').spawnSync
 fs = require 'fs'
 path = require 'path'
 
-dyndocker_machine_name = if process.platform == 'win32' then "kitematic" else "dev" #for windows kitematic!
+dyndocker_machine_name = "default"
 dyndocker_env = process.env
 docker_path='/usr/local/bin'
 user_home = process.env[if process.platform == "win32" then "USERPROFILE" else "HOME"]
@@ -65,7 +65,7 @@ class DyndockerRunner
     else
       out=spawnSync "docker", (@dyndocker_machine+" port "+atom.config.get("dyndocker.containerName")+" 7777/tcp").split(" "),{"env": dyndocker_env} 
       console.log("get Port:"+out.stdout.toString())
-      out.stdout.toString().split(":")[1]
+      out.stdout.toString().split(":")[1] ? "7777"
 
   @compile: (dyn_file) ->
     if ((dyn_file.match /\/src\//) != null)

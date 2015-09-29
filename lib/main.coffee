@@ -29,10 +29,13 @@ module.exports =
   config:
     containerName:
       type: 'string'
-      default: 'dyndoc-docker'
+      default: 'dyndocker'
     dyndockerHome:
       type: 'string'
       default: if fs.existsSync(path.join user_home,".dyndocker_home") then String(fs.readFileSync(path.join user_home,".dyndocker_home")).trim() else path.join user_home,"dyndocker" 
+    dyndockerMachine:
+      type: 'string'
+      default: 'default'
     addToPath: 
       type: 'string'
       default: '/usr/local/bin:' + path.join(user_home,"bin") # you can add anoter path with ":"

@@ -35,7 +35,7 @@ exports.eval = (text='', filePath, callback) ->
 		host = "127.0.0.1"
 		port = "7777"
 	else
-		dyndocker_machine_name = if process.platform == 'win32' then "kitematic" else "dev" #for windows kitematic!
+		dyndocker_machine_name = "default"
 		console.log("dyndoc-machine="+dyndocker_machine_name)
 		host = spawnSync "docker-machine", ("ip "+dyndocker_machine_name).split(" "),{"env": dyndocker_env}
 		host=host.stdout.toString("utf-8").trim() #atom.config.get 'dyndocker.dockerServerUrl'
