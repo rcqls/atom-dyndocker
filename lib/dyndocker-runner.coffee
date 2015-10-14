@@ -81,7 +81,9 @@ class DyndockerRunner
     dyn_file_inside_docker = dyn_file.replace dyndocker_pre_path,""
     console.log "dyndocker compile: "+dyn_file_inside_docker
     if (dyn_file.match dyndocker_pre_path) != null
-      compile_cmd=@dyndocker_run_cmd + "exec "+atom.config.get("dyndocker.containerName")+" dyn" + " \"" + dyn_file_inside_docker + "\""
+      ##old one! compile_cmd=@dyndocker_run_cmd + "exec "+atom.config.get("dyndocker.containerName")+" dyn" + " \"" + dyn_file_inside_docker + "\""
+      dyndocker_cmd=path.join(process.env.HOME,".dyndocker","bin","dyndocker")
+      compile_cmd=dyndocker_cmd+"  build" + " \"%" + dyn_file_inside_docker + "\""
       exec compile_cmd, {"env": dyndocker_env}, (error,stdout,stderr) ->
         console.log 'dyndocker-compile stdout: ' + stdout
         console.log 'dyndocker-compile stderr: ' + stderr
