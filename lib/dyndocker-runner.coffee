@@ -11,10 +11,11 @@ docker_path='/usr/local/bin'
 user_home = process.env[if process.platform == "win32" then "USERPROFILE" else "HOME"]
 
 if process.platform == 'win32'
-  paths = (pa for pa in fs.readdirSync path.join(process.env.LOCALAPPDATA,"Kitematic") when pa.split("\-")[0]=="app").sort().reverse()
+  #paths = (pa for pa in fs.readdirSync path.join(process.env.LOCALAPPDATA,"Kitematic") when pa.split("\-")[0]=="app").sort().reverse()
   #docker_path=path.join(process.env.LOCALAPPDATA,"Kitematic",paths[0],"resources","resources")
   docker_path=path.join(process.env.PROGRAMW6432,"Docker Toolbox")
-  dyndocker_env["PATH"] += ';' + docker_path + ';' + path.join(user_home,"bin")
+  bash_path=path.join(process.env.PROGRAMW6432,"Git","bin")
+  dyndocker_env["PATH"] += ';' + docker_path + ';' + bash_path + ';' + path.join(user_home,"bin")
 else
   dyndocker_env["PATH"] += ':' + docker_path + ':' + path.join(user_home,"bin")
 console.log "PATH("+process.platform+"):"+dyndocker_env["PATH"]
@@ -82,8 +83,9 @@ class DyndockerRunner
     console.log "dyndocker compile: "+dyn_file_inside_docker
     if (dyn_file.match dyndocker_pre_path) != null
       ##old one! compile_cmd=@dyndocker_run_cmd + "exec "+atom.config.get("dyndocker.containerName")+" dyn" + " \"" + dyn_file_inside_docker + "\""
-      dyndocker_cmd=path.join(process.env.HOME,".dyndocker","bin","dyndocker")
-      compile_cmd=dyndocker_cmd+"  build" + " \"%" + dyn_file_inside_docker + "\""
+      dyndocker_cmd=path.join(user_home,".dyndocker","bin","dyndocker")
+      compile_cmd= "bash --login " + dyndocker_cmd+"  build" + " \"%" + dyn_file_inside_docker + "\""
+      console.log compile_cmd
       exec compile_cmd, {"env": dyndocker_env}, (error,stdout,stderr) ->
         console.log 'dyndocker-compile stdout: ' + stdout
         console.log 'dyndocker-compile stderr: ' + stderr
