@@ -7,6 +7,7 @@ DyndockerViewer = require './dyndocker-viewer' #null # Defer until used
 rendererCoffee = require './render-coffee'
 rendererDyndocker = require './render-dyndocker'
 DyndockerRunner = require './dyndocker-runner'
+DyndockerTaskWriter = require './dyndocker-task-writer'
 
 #rendererDyndocker = null # Defer until user choose mode local or server
 
@@ -60,6 +61,8 @@ module.exports =
         @eval()
       'dyndocker:compile': =>
         @compile()
+      'dyndocker:task-write-dyn-tex': =>
+        @writeDynTexTask()
       'dyndocker:atom-dyndoc': =>
         @atomDyndoc()
       'dyndocker:coffee': =>
@@ -138,6 +141,11 @@ module.exports =
     dyn_file = atom.workspace.getActivePaneItem().getPath()
     console.log("compile dyn_file:"+dyn_file)
     DyndockerRunner.compile dyn_file
+
+  writeDynTexTask: -> 
+    dyn_file = atom.workspace.getActivePaneItem().getPath()
+    console.log("write task for dyn_file:"+dyn_file)
+    DyndockerTaskWriter.write_task_from_default dyn_file
 
   restartServer: ->
     DyndockerRunner.restart()

@@ -20,6 +20,10 @@
         'command': 'dyndocker:compile' 
       },
       {
+        'label': 'Task Dyn+Tex'
+        'command': 'dyndocker:task-write-dyn-tex' 
+      },
+      {
         'label': 'Atom Dyndoc'
         'command': 'dyndocker:atom-dyndoc' 
       }

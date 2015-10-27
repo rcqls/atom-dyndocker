@@ -8,6 +8,7 @@
       "dyndocker:eval",
       "dyndocker:atom-dyndoc",
       "dyndocker:compile",
+      "dyndocker:task-write-dyn-tex",
       "dyndocker:toggle",
       "dyndocker:restart"
     ]
