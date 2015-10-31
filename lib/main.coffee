@@ -56,13 +56,14 @@ module.exports =
       ]
 
   activate: (state) ->
+    console.log "activate!!!"
     atom.commands.add 'atom-workspace', 
       'dyndocker:eval': =>
         @eval()
       'dyndocker:compile': =>
         @compile()
-      'dyndocker:task-write-dyn-tex': =>
-        @writeDynTexTask()
+      'dyndocker:task-write-dyn-pdflatex': =>
+        @writeTask("dyn-pdflatex")
       'dyndocker:atom-dyndoc': =>
         @atomDyndoc()
       'dyndocker:coffee': =>
@@ -78,6 +79,8 @@ module.exports =
 
     #atom.workspaceView.on 'dyndocker:preview-file', (event) =>
     #  @previewFile(event)
+
+    console.log "end activate!!!"
  
     atom.workspace.addOpener (uriToOpen) ->
       try
@@ -142,10 +145,11 @@ module.exports =
     console.log("compile dyn_file:"+dyn_file)
     DyndockerRunner.compile dyn_file
 
-  writeDynTexTask: -> 
+  writeTask: (mode) -> 
+    console.log("write task mode " + mode + " for dyn_file:"+dyn_file)
     dyn_file = atom.workspace.getActivePaneItem().getPath()
-    console.log("write task for dyn_file:"+dyn_file)
-    DyndockerTaskWriter.write_task_from_default dyn_file
+    console.log("write task mode " + mode + " for dyn_file:"+dyn_file)
+    DyndockerTaskWriter.write_task dyn_file, mode
 
   restartServer: ->
     DyndockerRunner.restart()

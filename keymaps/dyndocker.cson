@@ -9,18 +9,18 @@
 # https://www.atom.io/docs/latest/advanced/keymaps
 
 '.platform-darwin atom-workspace':
+  'cmd-alt-x b': 'dyndocker:task-write-dyn-pdflatex'
   'cmd-alt-x d': 'dyndocker:eval'
   'cmd-alt-x a': 'dyndocker:atom-dyndoc'
   'cmd-alt-x c': 'dyndocker:compile'
-  'cmd-alt-x l': 'dyndocker:task-write-dyn-tex'
   'cmd-alt-x t': 'dyndocker:toggle'
   'cmd-alt-x r': 'dyndocker:restart'
 
 '.platform-win32 atom-workspace, .platform-linux atom-workspace':
+  'ctrl-alt-x b': 'dyndocker:task-write-dyn-pdflatex'
   'ctrl-alt-x d': 'dyndocker:eval'
   'ctrl-alt-x a': 'dyndocker:atom-dyndoc'
   'ctrl-alt-x c': 'dyndocker:compile'
-  'ctrl-alt-x l': 'dyndocker:task-write-dyn-tex'
   'ctrl-alt-x t': 'dyndocker:toggle'
   'ctrl-alt-x r': 'dyndocker:restart'
 

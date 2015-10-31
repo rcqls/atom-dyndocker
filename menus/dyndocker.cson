@@ -20,8 +20,8 @@
         'command': 'dyndocker:compile' 
       },
       {
-        'label': 'Task Dyn+Tex'
-        'command': 'dyndocker:task-write-dyn-tex' 
+        'label': 'Task Dyn+Pdflatex'
+        'command': 'dyndocker:task-write-dyn-pdflatex' 
       },
       {
         'label': 'Atom Dyndoc'
