@@ -1,7 +1,7 @@
 {
   "name": "dyndocker",
   "main": "./lib/main",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "dyndoc docker from atom",
   "activationCommands": {
     "atom-workspace": [
