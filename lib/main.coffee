@@ -62,8 +62,10 @@ module.exports =
         @eval()
       'dyndocker:compile': =>
         @compile()
-      'dyndocker:task-write-dyn-pdflatex': =>
-        @writeTask("dyn-pdflatex")
+      'dyndocker:task-write-dyn2tex2pdf': =>
+        @writeTask("dyn2tex2pdf")
+      'dyndocker:task-write-dyn2html': =>
+        @writeTask("dyn2html")
       'dyndocker:atom-dyndoc': =>
         @atomDyndoc()
       'dyndocker:coffee': =>
@@ -145,8 +147,7 @@ module.exports =
     console.log("compile dyn_file:"+dyn_file)
     DyndockerRunner.compile dyn_file
 
-  writeTask: (mode) -> 
-    console.log("write task mode " + mode + " for dyn_file:"+dyn_file)
+  writeTask: (mode) ->
     dyn_file = atom.workspace.getActivePaneItem().getPath()
     console.log("write task mode " + mode + " for dyn_file:"+dyn_file)
     DyndockerTaskWriter.write_task dyn_file, mode

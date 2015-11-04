@@ -15,7 +15,7 @@ module.exports =
     default_file = path.join(process.env["HOME"],".dyntask","share")
     default_file = path.join(default_file,"tasks","task_" + mode + ".rb")
     content = fs.readFileSync(default_file).toString('utf-8')
-    console.log "content:"+content
+    #console.log "content:"+content
     task = @task_type(content)
     if task
       task_filename = path.join(dir,base+".task_"+task)
