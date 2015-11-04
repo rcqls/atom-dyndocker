@@ -12,7 +12,8 @@ module.exports =
     ext = path.extname filename
     dir = path.dirname filename
     base = path.basename filename,ext
-    default_file = path.join(process.env["HOME"],".dyntask","share")
+    user_home = process.env[if process.platform == "win32" then "USERPROFILE" else "HOME"]
+    default_file = path.join(user_home,".dyntask","share")
     default_file = path.join(default_file,"tasks","task_" + mode + ".rb")
     content = fs.readFileSync(default_file).toString('utf-8')
     #console.log "content:"+content
