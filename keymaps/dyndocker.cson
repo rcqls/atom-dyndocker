@@ -18,7 +18,7 @@
   'cmd-alt-x r': 'dyndocker:restart'
 
 '.platform-win32 atom-workspace, .platform-linux atom-workspace':
-  'alt-r t': 'dyndocker:task-write-dyn-dyn2tex2pdf'
+  'alt-r t': 'dyndocker:task-write-dyn2tex2pdf'
   'alt-r h': 'dyndocker:task-write-dyn2html'
   'ctrl-alt-x d': 'dyndocker:eval'
   'ctrl-alt-x a': 'dyndocker:atom-dyndoc'
