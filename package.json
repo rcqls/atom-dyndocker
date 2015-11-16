@@ -9,6 +9,7 @@
       "dyndocker:atom-dyndoc",
       "dyndocker:compile",
       "dyndocker:task-write-dyn2tex2pdf",
+      "dyndocker:task-write-dyn2html-cli",
       "dyndocker:task-write-dyn2html",
       "dyndocker:toggle",
       "dyndocker:restart"
