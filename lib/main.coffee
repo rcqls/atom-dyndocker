@@ -66,6 +66,8 @@ module.exports =
         @writeTask("dyn2tex2pdf")
       'dyndocker:task-write-dyn2html': =>
         @writeTask("dyn2html")
+      'dyndocker:task-write-dyn2html-cli': =>
+        @writeTask("dyn2html-cli")
       'dyndocker:atom-dyndoc': =>
         @atomDyndoc()
       'dyndocker:coffee': =>

@@ -10,7 +10,7 @@
 
 '.platform-darwin atom-workspace':
   'cmd-alt-r t': 'dyndocker:task-write-dyn2tex2pdf'
-  'cmd-alt-r h': 'dyndocker:task-write-dyn2html'
+  'cmd-alt-r h': 'dyndocker:task-write-dyn2html-cli'
   'cmd-alt-x d': 'dyndocker:eval'
   'cmd-alt-x a': 'dyndocker:atom-dyndoc'
   'cmd-alt-x c': 'dyndocker:compile'
@@ -19,7 +19,7 @@
 
 '.platform-win32 atom-workspace, .platform-linux atom-workspace':
   'alt-r t': 'dyndocker:task-write-dyn2tex2pdf'
-  'alt-r h': 'dyndocker:task-write-dyn2html'
+  'alt-r h': 'dyndocker:task-write-dyn2html-cli'
   'ctrl-alt-x d': 'dyndocker:eval'
   'ctrl-alt-x a': 'dyndocker:atom-dyndoc'
   'ctrl-alt-x c': 'dyndocker:compile'

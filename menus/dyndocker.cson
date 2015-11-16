@@ -24,6 +24,10 @@
         'command': 'dyndocker:task-write-dyn2tex2pdf' 
       },
       {
+        'label': 'Task Dyn->Html (client)'
+        'command': 'dyndocker:task-write-dyn2html-cli' 
+      },
+      {
         'label': 'Task Dyn->Html'
         'command': 'dyndocker:task-write-dyn2html' 
       },
